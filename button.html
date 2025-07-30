@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Runaway Button</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            cursor: none;
+        }
+
+        .container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            margin: 0 auto;
+            border: 2px solid #333;
+            background: #222;
+        }
+
+        .button {
+            position: absolute;
+            padding: 15px 30px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: #ff5252;
+        }
+
+        .instructions {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .stats {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #333;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid black;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h1>🏃‍♂️ The Runaway Button</h1>
+        <p>Try to click the button. It doesn't want to be clicked.</p>
+    </div>
+
+    <div class="container" id="container">
+        <button class="button" id="runawayBtn">Click Me!</button>
+        <div class="stats">
+            <div>Attempts: <span id="attempts">0</span></div>
+            <div>Button mood: <span id="mood">Relaxed</span></div>
+        </div>
+    </div>
+
+    <div class="custom-cursor" id="cursor"></div>
+
+    <script>
+        const button = document.getElementById('runawayBtn');
+        const container = document.getElementById('container');
+        const cursor = document.getElementById('cursor');
+        const attemptsSpan = document.getElementById('attempts');
+        const moodSpan = document.getElementById('mood');
+
+        let attempts = 0;
+        let mouseX = 0, mouseY = 0;
+        const moods = ['Relaxed', 'Alert', 'Nervous', 'Panicking', 'ESCAPING!'];
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+
+        function runAway() {
+            const containerRect = container.getBoundingClientRect();
+            const buttonRect = button.getBoundingClientRect();
+            
+            // Calculate distance from cursor to button
+            const distX = mouseX - (buttonRect.left + buttonRect.width/2);
+            const distY = mouseY - (buttonRect.top + buttonRect.height/2);
+            const distance = Math.sqrt(distX*distX + distY*distY);
+            
+            if (distance < 120) {
+                attempts++;
+                attemptsSpan.textContent = attempts;
+                
+                // Update mood based on attempts
+                const moodIndex = Math.min(Math.floor(attempts/3), moods.length-1);
+                moodSpan.textContent = moods[moodIndex];
+                
+                // Calculate new position (away from cursor)
+                const newX = Math.random() * (containerRect.width - 120);
+                const newY = Math.random() * (containerRect.height - 50);
+                
+                button.style.left = newX + 'px';
+                button.style.top = newY + 'px';
+                
+                // Change button text
+                const texts = ['Nope!', 'Too slow!', 'Try again!', 'Almost!', 'Missed me!'];
+                button.textContent = texts[Math.floor(Math.random() * texts.length)];
+                
+                setTimeout(() => {
+                    button.textContent = 'Click Me!';
+                }, 1000);
+            }
+        }
+
+        // Check for cursor proximity every 100ms
+        setInterval(runAway, 100);
+
+        // Initial position
+        button.style.left = '350px';
+        button.style.top = '250px';
+
+        button.addEventListener('click', () => {
+            if (attempts > 10) {
+                alert('🎉 You finally caught me! Well done!');
+            } else {
+                alert('Lucky click! Chase me ' + (11-attempts) + ' more times to really earn it!');
+            }
+        });
+    </script>
+</body>
+</html>
