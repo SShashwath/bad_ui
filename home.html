@@ -203,6 +203,19 @@
             50% { opacity: 0.8; transform: translateX(-10px) scaleX(1.1); }
         }
 
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid black;
+            border-radius: 50% 0 50% 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: rotate(-45deg);
+            transition: all 0.1s ease;
+        }
+
         .message {
             position: absolute;
             bottom: 20px;
@@ -247,7 +260,7 @@
         </div>
         
         <div class="message">
-            Try to click the unsubscribe button... I dare you! 🌪️
+            Try to click the unsubscribe button... The fan will push your cursor away! 🌪️
         </div>
     </div>
     
@@ -285,26 +298,29 @@
                                mouseY < windZoneBottom;
             
             if (isInWindZone) {
-                // Continuous leftward push when in wind zone
-                const windStrength = 3; // Constant push force
-                const turbulence = (Math.random() - 0.5) * 2; // Random wobble
+                // Allow vertical movement, but push horizontally
+                cursorY = mouseY; // Follow mouse vertically
                 
-                // Keep pushing cursor left
+                // Continuous leftward push when in wind zone
+                const windStrength = 4; // Constant push force
+                const turbulence = (Math.random() - 0.5) * 3; // Random wobble
+                
+                // Keep pushing cursor left, but allow it to move up and down
                 cursorX = cursorX - windStrength + turbulence;
-                cursorY = cursorY + (Math.random() - 0.5) * 1; // Slight vertical drift
                 
                 // Don't let cursor go too far left
-                cursorX = Math.max(containerRect.left - 50, cursorX);
-                
-                // Keep cursor within vertical bounds
-                cursorY = Math.max(0, Math.min(window.innerHeight, cursorY));
+                cursorX = Math.max(containerRect.left - 100, cursorX);
                 
             } else {
                 // Smoothly return cursor to mouse position when not in wind zone
-                const returnSpeed = 0.15;
+                const returnSpeed = 0.2;
                 cursorX += (mouseX - cursorX) * returnSpeed;
                 cursorY += (mouseY - cursorY) * returnSpeed;
             }
+            
+            // Keep cursor within bounds
+            cursorX = Math.max(0, Math.min(window.innerWidth, cursorX));
+            cursorY = Math.max(0, Math.min(window.innerHeight, cursorY));
             
             cursor.style.left = cursorX + 'px';
             cursor.style.top = cursorY + 'px';
@@ -321,18 +337,18 @@
                 Math.pow(cursorX - mouseX, 2) + Math.pow(cursorY - mouseY, 2)
             );
             
-            if (cursorDistance < 10) {
+            if (cursorDistance < 15) {
                 alert('Congratulations! You somehow managed to unsubscribe despite our fan! 🎉');
             } else {
                 e.preventDefault();
                 // Move button slightly when "missed"
-                const randomX = Math.random() * 20 - 10;
-                const randomY = Math.random() * 20 - 10;
+                const randomX = Math.random() * 30 - 15;
+                const randomY = Math.random() * 30 - 15;
                 unsubBtn.style.transform = `translateY(-50%) translate(${randomX}px, ${randomY}px)`;
                 
                 setTimeout(() => {
                     unsubBtn.style.transform = 'translateY(-50%)';
-                }, 500);
+                }, 600);
             }
         });
         
