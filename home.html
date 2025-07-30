@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fans Keep Subscribers</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            position: relative;
+            width: 800px;
+            height: 500px;
+            background: #f0f0f0;
+            border: 3px solid #333;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .waves {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 200px;
+        }
+
+        .wave {
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background: repeating-linear-gradient(
+                90deg,
+                #87CEEB 0px,
+                #87CEEB 20px,
+                #B0E0E6 20px,
+                #B0E0E6 40px
+            );
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        .wave:nth-child(1) { top: 0px; animation-delay: 0s; }
+        .wave:nth-child(2) { top: 25px; animation-delay: -0.2s; }
+        .wave:nth-child(3) { top: 50px; animation-delay: -0.4s; }
+        .wave:nth-child(4) { top: 75px; animation-delay: -0.6s; }
+        .wave:nth-child(5) { top: 100px; animation-delay: -0.8s; }
+        .wave:nth-child(6) { top: 125px; animation-delay: -1s; }
+        .wave:nth-child(7) { top: 150px; animation-delay: -1.2s; }
+        .wave:nth-child(8) { top: 175px; animation-delay: -1.4s; }
+
+        @keyframes wave {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(-40px); }
+        }
+
+        .fan {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: 180px;
+            z-index: 5;
+        }
+
+        .fan-base {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 60px;
+            background: linear-gradient(145deg, #444, #222);
+            border-radius: 8px;
+            border: 2px solid #333;
+        }
+
+        .fan-pole {
+            position: absolute;
+            bottom: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 80px;
+            background: linear-gradient(90deg, #666, #999, #666);
+            border-radius: 6px;
+        }
+
+        .fan-blades {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            animation: spin 0.08s linear infinite;
+        }
+
+        .fan-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #333, #111);
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .blade {
+            position: absolute;
+            width: 40px;
+            height: 12px;
+            background: linear-gradient(45deg, #555, #333, #555);
+            border-radius: 6px;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 50%;
+            border: 1px solid #222;
+        }
+
+        .blade:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateX(25px); }
+        .blade:nth-child(2) { transform: translate(-50%, -50%) rotate(72deg) translateX(25px); }
+        .blade:nth-child(3) { transform: translate(-50%, -50%) rotate(144deg) translateX(25px); }
+        .blade:nth-child(4) { transform: translate(-50%, -50%) rotate(216deg) translateX(25px); }
+        .blade:nth-child(5) { transform: translate(-50%, -50%) rotate(288deg) translateX(25px); }
+
+        @keyframes spin {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        .unsubscribe-btn {
+            position: absolute;
+            top: 50%;
+            left: 300px;
+            transform: translateY(-50%);
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .unsubscribe-btn:hover {
+            background: #ff5252;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid black;
+            border-radius: 50% 0 50% 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: rotate(-45deg);
+            transition: all 0.1s ease;
+        }
+
+        .wind-effect {
+            position: absolute;
+            right: 150px;
+            top: 20%;
+            width: 400px;
+            height: 60%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0px,
+                rgba(173, 216, 230, 0.2) 10px,
+                rgba(173, 216, 230, 0.4) 20px,
+                rgba(173, 216, 230, 0.2) 30px,
+                transparent 40px,
+                transparent 50px
+            );
+            animation: windFlow 0.3s ease-in-out infinite;
+        }
+
+        @keyframes windFlow {
+            0%, 100% { opacity: 0.6; transform: translateX(0px) scaleX(1); }
+            50% { opacity: 0.8; transform: translateX(-10px) scaleX(1.1); }
+        }
+
+        .message {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #666;
+            font-style: italic;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">4) Fans are a good way to keep subscribers</div>
+    
+    <div class="container">
+        <div class="waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+        
+        <div class="wind-effect"></div>
+        
+        <button class="unsubscribe-btn" id="unsubBtn">Unsubscribe</button>
+        
+        <div class="fan">
+            <div class="fan-base"></div>
+            <div class="fan-pole"></div>
+            <div class="fan-blades">
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="fan-center"></div>
+            </div>
+        </div>
+        
+        <div class="message">
+            Try to click the unsubscribe button... I dare you! 🌪️
+        </div>
+    </div>
+    
+    <div class="custom-cursor" id="cursor"></div>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const unsubBtn = document.getElementById('unsubBtn');
+        const container = document.querySelector('.container');
+        
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        
+        // Track real mouse position
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        // Fan wind effect - continuously pushes cursor left when in wind stream
+        function updateCursorPosition() {
+            const containerRect = container.getBoundingClientRect();
+            
+            // Define the wind stream zone (in front of the fan)
+            const windZoneLeft = containerRect.left + containerRect.width * 0.2;
+            const windZoneRight = containerRect.left + containerRect.width * 0.85;
+            const windZoneTop = containerRect.top + containerRect.height * 0.2;
+            const windZoneBottom = containerRect.top + containerRect.height * 0.8;
+            
+            const isInWindZone = mouseX > windZoneLeft && 
+                               mouseX < windZoneRight &&
+                               mouseY > windZoneTop && 
+                               mouseY < windZoneBottom;
+            
+            if (isInWindZone) {
+                // Continuous leftward push when in wind zone
+                const windStrength = 3; // Constant push force
+                const turbulence = (Math.random() - 0.5) * 2; // Random wobble
+                
+                // Keep pushing cursor left
+                cursorX = cursorX - windStrength + turbulence;
+                cursorY = cursorY + (Math.random() - 0.5) * 1; // Slight vertical drift
+                
+                // Don't let cursor go too far left
+                cursorX = Math.max(containerRect.left - 50, cursorX);
+                
+                // Keep cursor within vertical bounds
+                cursorY = Math.max(0, Math.min(window.innerHeight, cursorY));
+                
+            } else {
+                // Smoothly return cursor to mouse position when not in wind zone
+                const returnSpeed = 0.15;
+                cursorX += (mouseX - cursorX) * returnSpeed;
+                cursorY += (mouseY - cursorY) * returnSpeed;
+            }
+            
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            
+            requestAnimationFrame(updateCursorPosition);
+        }
+        
+        updateCursorPosition();
+        
+        // Make the button extra hard to click
+        unsubBtn.addEventListener('click', (e) => {
+            // Only allow click if cursor is very close to actual mouse position
+            const cursorDistance = Math.sqrt(
+                Math.pow(cursorX - mouseX, 2) + Math.pow(cursorY - mouseY, 2)
+            );
+            
+            if (cursorDistance < 10) {
+                alert('Congratulations! You somehow managed to unsubscribe despite our fan! 🎉');
+            } else {
+                e.preventDefault();
+                // Move button slightly when "missed"
+                const randomX = Math.random() * 20 - 10;
+                const randomY = Math.random() * 20 - 10;
+                unsubBtn.style.transform = `translateY(-50%) translate(${randomX}px, ${randomY}px)`;
+                
+                setTimeout(() => {
+                    unsubBtn.style.transform = 'translateY(-50%)';
+                }, 500);
+            }
+        });
+        
+        // Show cursor on page load
+        setTimeout(() => {
+            cursor.style.display = 'block';
+        }, 100);
+    </script>
+</body>
+</html>
